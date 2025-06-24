@@ -1,0 +1,2 @@
+# GoPracticeProjects
+Learning Golang
