@@ -1,14 +1,24 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+	"os"
+	"strconv"
+)
 
-var accountBalance = 1000.0
+var accountBalance, _ = readBalanceFile()
 
 func main() {
 
-	for i := 0; i < 2; i++ {
+	// for i := 0; i < 2; i++ {
+	for {
 		choice := welcomeUser()
+		if choice == 4 {
+			break
+		}
 		bankChoiceActions(choice)
+		writeBalanceToFile(accountBalance)
 	}
 	// fmt.Println("Final Balance:", accountBalance)
 }
@@ -34,7 +44,6 @@ func bankChoiceActions(choice int) {
 		fmt.Scan(&deposite)
 		if deposite <= 0 {
 			fmt.Println("Invalid amount.")
-			return
 		}
 		// accountBalance = accountBalance + deposite
 		accountBalance += deposite
@@ -44,12 +53,29 @@ func bankChoiceActions(choice int) {
 		fmt.Scan(&withdraw)
 		if withdraw > accountBalance {
 			fmt.Println("Invalid amount.")
-			return
 		}
 		// accountBalance = accountBalance - withdraw
 		accountBalance -= withdraw
 		fmt.Println("Your account balance is: ", accountBalance)
 	} else {
-		fmt.Println("Thank you for visiting!")
+		fmt.Println("Thank you for chooseing our bank!")
 	}
+}
+
+func writeBalanceToFile(balance float64) {
+	balanceText := fmt.Sprint(balance)
+	os.WriteFile("balance.txt", []byte(balanceText), 0644)
+}
+
+func readBalanceFile() (float64, error) {
+	data, err := os.ReadFile("balance.txt")
+	if err != nil {
+		return 1000, errors.New("Testing own error")
+	}
+	balanceText := string(data)
+	balance, err := strconv.ParseFloat(balanceText, 64)
+	if err != nil {
+		return 1000, errors.New("Testing own error")
+	}
+	return balance, nil
 }
