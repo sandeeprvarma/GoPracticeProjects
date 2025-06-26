@@ -1,13 +1,11 @@
 package main
 
 import (
-	"errors"
+	"bank/balance"
 	"fmt"
-	"os"
-	"strconv"
 )
 
-var accountBalance, _ = readBalanceFile()
+var accountBalance, _ = balance.ReadBalanceFile()
 
 func main() {
 
@@ -18,7 +16,7 @@ func main() {
 			break
 		}
 		bankChoiceActions(choice)
-		writeBalanceToFile(accountBalance)
+		balance.WriteBalanceToFile(accountBalance)
 	}
 	// fmt.Println("Final Balance:", accountBalance)
 }
@@ -60,22 +58,4 @@ func bankChoiceActions(choice int) {
 	} else {
 		fmt.Println("Thank you for chooseing our bank!")
 	}
-}
-
-func writeBalanceToFile(balance float64) {
-	balanceText := fmt.Sprint(balance)
-	os.WriteFile("balance.txt", []byte(balanceText), 0644)
-}
-
-func readBalanceFile() (float64, error) {
-	data, err := os.ReadFile("balance.txt")
-	if err != nil {
-		return 1000, errors.New("Testing own error")
-	}
-	balanceText := string(data)
-	balance, err := strconv.ParseFloat(balanceText, 64)
-	if err != nil {
-		return 1000, errors.New("Testing own error")
-	}
-	return balance, nil
 }
