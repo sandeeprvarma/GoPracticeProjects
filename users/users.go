@@ -8,6 +8,13 @@ type user struct {
 	age       int
 }
 
+func newUser(firstName string, lastName string, age int) user {
+	return user{
+		firstName: firstName,
+		lastName:  lastName,
+		age:       age,
+	}
+}
 func main() {
 	var firstName, lastName string
 	var age int
@@ -15,11 +22,7 @@ func main() {
 	fmt.Scan(&lastName)
 	fmt.Scan(&age)
 
-	var userDetails = user{
-		firstName: firstName,
-		lastName:  lastName,
-		age:       age,
-	}
+	var userDetails = newUser(firstName, lastName, age)
 
 	userDetails.showUserDetails()
 	// showUserDetails(&userDetails)
