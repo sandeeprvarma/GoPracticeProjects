@@ -8,8 +8,8 @@ type user struct {
 	age       int
 }
 
-func newUser(firstName string, lastName string, age int) user {
-	return user{
+func newUser(firstName string, lastName string, age int) *user {
+	return &user{
 		firstName: firstName,
 		lastName:  lastName,
 		age:       age,
