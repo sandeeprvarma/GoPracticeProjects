@@ -21,9 +21,13 @@ func main() {
 		age:       age,
 	}
 
-	showUserDetails(&userDetails)
+	userDetails.showUserDetails()
+	// showUserDetails(&userDetails)
 }
 
-func showUserDetails(userDetails *user) {
+//	func showUserDetails(userDetails *user) {
+//		fmt.Println(userDetails.firstName, userDetails.lastName, userDetails.age)
+//	}
+func (userDetails user) showUserDetails() {
 	fmt.Println(userDetails.firstName, userDetails.lastName, userDetails.age)
 }
