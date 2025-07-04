@@ -1,20 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"users/structs"
+)
 
-type user struct {
-	firstName string
-	lastName  string
-	age       int
-}
-
-func newUser(firstName string, lastName string, age int) *user {
-	return &user{
-		firstName: firstName,
-		lastName:  lastName,
-		age:       age,
-	}
-}
 func main() {
 	var firstName, lastName string
 	var age int
@@ -22,15 +12,19 @@ func main() {
 	fmt.Scan(&lastName)
 	fmt.Scan(&age)
 
-	var userDetails = newUser(firstName, lastName, age)
+	var userDetails *structs.User
+	userDetails, err := structs.NewUser(firstName, lastName, age)
+	adminDetail := structs.NewAdmin("a@b.c", "abcd")
+	fmt.Printf("adminDetail: %v\n", adminDetail)
 
-	userDetails.showUserDetails()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	userDetails.ShowUserDetails()
 	// showUserDetails(&userDetails)
 }
 
 //	func showUserDetails(userDetails *user) {
 //		fmt.Println(userDetails.firstName, userDetails.lastName, userDetails.age)
 //	}
-func (userDetails user) showUserDetails() {
-	fmt.Println(userDetails.firstName, userDetails.lastName, userDetails.age)
-}
