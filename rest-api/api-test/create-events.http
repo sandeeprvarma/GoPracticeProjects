@@ -1,0 +1,9 @@
+POST http://localhost:8080/events
+Content-Type: "application/json"
+
+{
+  "ID": 1,
+  "Title": "ABCD",
+  "UserID": 1,
+  "Created_At": "2025-07-24T00:32:36.598711+05:30"
+}
