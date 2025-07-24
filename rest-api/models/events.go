@@ -1,20 +1,58 @@
 package models
 
-import "time"
+import (
+	"rest-api/db"
+	"time"
+)
 
 type Events struct {
-	ID         int
-	Title      string `binding:"required"`
-	UserId     int    `binding:"required"`
-	Created_At time.Time
+	ID         int64
+	Title      string    `binding:"required"`
+	UserId     int       `binding:"required"`
+	Created_At time.Time `binding:"required"`
 }
 
-var events = []Events{}
+// var events = []Events{}
 
 func (e Events) Save() {
-	events = append(events, e)
+	// events = append(events, e)
+	query := `INSERT INTO events (title, userId, created_at) VALUES (?, ?, ?)`
+	queryStatement, err := db.DB.Prepare(query)
+	if err != nil {
+		panic(err)
+	}
+	defer queryStatement.Close()
+	result, err := queryStatement.Exec(e.Title, e.UserId, e.Created_At)
+	if err != nil {
+		panic(err)
+	}
+
+	id, err := result.LastInsertId()
+	e.ID = id
+
+	if err != nil {
+		panic(err)
+	}
+
 }
 
-func GetAllEvents() []Events {
-	return events
+func GetAllEvents() ([]Events, error) {
+	query := `SELECT* FROM events`
+	rows, err := db.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var events []Events
+
+	for rows.Next() {
+		var event Events
+		err := rows.Scan(&event.ID, &event.Title, &event.UserId, &event.Created_At)
+		if err != nil {
+			return nil, err
+		}
+		events = append(events, event)
+	}
+	return events, nil
 }

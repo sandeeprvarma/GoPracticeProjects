@@ -4,14 +4,15 @@ package main
 
 import (
 	"net/http"
+	"rest-api/db"
 	"rest-api/models"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	server := gin.Default()
+	db.DbInit()
 	server.GET("/events", getAllEvents)
 	server.POST("/events", createEvents)
 
@@ -20,14 +21,18 @@ func main() {
 
 func getAllEvents(context *gin.Context) {
 	// fmt.Println("Events")
-	var newEvents = models.Events{
-		ID:         1,
-		Title:      "ABCD",
-		UserId:     123,
-		Created_At: time.Now(),
+	// var newEvents = models.Events{
+	// 	ID:         1,
+	// 	Title:      "ABCD",
+	// 	UserId:     123,
+	// 	Created_At: time.Now(),
+	// }
+	// newEvents.Save()
+	events, err := models.GetAllEvents()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		return
 	}
-	newEvents.Save()
-	events := models.GetAllEvents()
 	// context.JSON(http.StatusOK, gin.H{"message": "Hello Sandeep!"})
 	context.JSON(http.StatusOK, events)
 }
@@ -39,5 +44,6 @@ func createEvents(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"message": err})
 		return
 	}
+	events.Save()
 	context.JSON(http.StatusCreated, gin.H{"message": "Event Created Successfully!"})
 }
