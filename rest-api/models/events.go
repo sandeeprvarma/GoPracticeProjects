@@ -37,7 +37,7 @@ func (e Events) Save() {
 }
 
 func GetAllEvents() ([]Events, error) {
-	query := `SELECT* FROM events`
+	query := `SELECT * FROM events`
 	rows, err := db.DB.Query(query)
 	if err != nil {
 		return nil, err
@@ -69,4 +69,22 @@ func GetEvent(id int64) (*Events, error) {
 	}
 
 	return &event, nil
+}
+
+func (e Events) UpdateEvent(id int64) {
+	query := `
+	UPDATE events
+	SET Title = ?, UserId = ?, Created_At = ?
+	WHERE id = ?
+	`
+	queryStatement, err := db.DB.Prepare(query)
+	if err != nil {
+		panic(err)
+	}
+	defer queryStatement.Close()
+
+	_, err = queryStatement.Exec(e.Title, e.UserId, e.Created_At, id)
+	if err != nil {
+		panic(err)
+	}
 }
