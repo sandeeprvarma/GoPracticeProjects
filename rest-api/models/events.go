@@ -88,3 +88,18 @@ func (e Events) UpdateEvent(id int64) {
 		panic(err)
 	}
 }
+
+func (e Events) Delete(id int64) {
+	query := `
+	DELETE FROM events WHERE id = ?`
+	queryStatement, err := db.DB.Prepare(query)
+	if err != nil {
+		panic(err)
+	}
+	defer queryStatement.Close()
+
+	_, err = queryStatement.Exec(id)
+	if err != nil {
+		panic(err)
+	}
+}
