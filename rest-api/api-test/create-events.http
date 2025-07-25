@@ -2,7 +2,7 @@ POST http://localhost:8080/events
 Content-Type: "application/json"
 
 {
-  "Title": "Sandeep",
-  "UserID": 2,
+  "Title": "Sandeep Varma",
+  "UserID": 44,
   "Created_At": "2025-07-24T00:32:36.598711+05:30"
 }
